@@ -1,0 +1,9 @@
+{
+  "name": "susubox",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SusuBox - digital susu group ledger (no-custody MVP)",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
