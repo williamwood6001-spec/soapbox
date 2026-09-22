@@ -17,8 +17,13 @@ const GROUPS = 'susubox-groups';
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 days
 
 function store(name) {
-  return getStore(name);
+  return getStore({
+    name,
+    siteID: process.env.BLOBS_SITE_ID,
+    token: process.env.BLOBS_TOKEN,
+  });
 }
+
 
 function jsonResponse(statusCode, body) {
   return {
