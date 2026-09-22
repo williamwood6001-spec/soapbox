@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SusuBox — Your susu, written down and seen by everyone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ LANDING ============ -->
+<div id="landing">
+  <header class="topbar">
+    <div class="wordmark">Susu<span>Box</span></div>
+    <button class="btn-ghost" id="openAuthTop">Sign in</button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow-plain">A digital susu passbook</p>
+      <h1>Every contribution,<br>written down.<br>Every payout,<br>seen by everyone.</h1>
+      <p class="hero-sub">Your group still pays each other directly by MoMo, same as always. SusuBox just keeps the record everyone can see — so no one can quietly disappear with the money.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="openAuthHero">Get started</button>
+        <a href="#how" class="btn-text">How it works ↓</a>
+      </div>
+    </div>
+    <div class="passbook" aria-hidden="true">
+      <div class="passbook-cover">
+        <div class="passbook-cover-inner">
+          <p class="passbook-cover-title">SUSUBOX</p>
+          <p class="passbook-cover-sub">Contribution Register</p>
+        </div>
+      </div>
+      <div class="passbook-page">
+        <div class="passbook-page-header"><span>Your group</span><span>Real, shared, live</span></div>
+        <ul class="ledger-mini">
+          <li><span>You</span><span class="stamp due">awaiting</span></li>
+          <li><span>Member 2</span><span class="stamp paid">✓ paid</span></li>
+          <li><span>Member 3</span><span class="stamp paid">✓ paid</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <p class="section-label">How it works</p>
+    <div class="how-grid">
+      <div class="how-row"><span class="how-num">1</span><div><h3>Create an account</h3><p>Just your name, phone number and a password — real accounts, shared across everyone in your group.</p></div></div>
+      <div class="how-row"><span class="how-num">2</span><div><h3>Verify with your Ghana Card</h3><p>A photo of your card and a selfie, stored against your account.</p></div></div>
+      <div class="how-row"><span class="how-num">3</span><div><h3>Create or join a group with a code</h3><p>Share a 6-character code with your group — everyone joins the same live ledger.</p></div></div>
+      <div class="how-row"><span class="how-num">4</span><div><h3>Pay each other, mark it down</h3><p>You still send MoMo directly. Mark your payment here so the whole group sees it.</p></div></div>
+    </div>
+  </section>
+
+  <footer class="landing-footer"><p>SusuBox — members pay each other directly; no funds pass through this platform.</p></footer>
+</div>
+
+<!-- ============ AUTH ============ -->
+<div id="auth" class="hidden">
+  <div class="auth-card">
+    <div class="wordmark small" style="margin-bottom:1.4rem;">Susu<span>Box</span></div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth="login">Sign in</button>
+      <button class="auth-tab" data-auth="signup">Create account</button>
+    </div>
+
+    <form id="loginForm" class="auth-form">
+      <label>Phone number<input type="tel" id="loginPhone" placeholder="024xxxxxxx" required></label>
+      <label>Password<input type="password" id="loginPassword" required></label>
+      <p class="form-error" id="loginError"></p>
+      <button type="submit" class="btn-primary" style="width:100%;">Sign in</button>
+    </form>
+
+    <form id="signupForm" class="auth-form hidden">
+      <label>Full name<input type="text" id="signupName" required></label>
+      <label>Phone number<input type="tel" id="signupPhone" placeholder="024xxxxxxx" required></label>
+      <label>Password<input type="password" id="signupPassword" minlength="6" required></label>
+      <p class="form-error" id="signupError"></p>
+      <button type="submit" class="btn-primary" style="width:100%;">Create account</button>
+    </form>
+
+    <button class="btn-text" id="backToLandingFromAuth" style="margin-top:1rem;">← Back</button>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" class="hidden">
+  <header class="app-topbar">
+    <div class="wordmark small">Susu<span>Box</span></div>
+    <div style="display:flex; gap:0.6rem;">
+      <span class="muted" id="whoami" style="align-self:center;"></span>
+      <button class="btn-ghost" id="logoutBtn">Sign out</button>
+    </div>
+  </header>
+
+  <div id="kycBanner" class="kyc-banner hidden">
+    <span>Verify your identity to build a trust record other groups can see.</span>
+    <button class="btn-primary small" id="kycBannerBtn">Verify now</button>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="groups">Groups</button>
+    <button class="tab" data-tab="ledger">Ledger</button>
+    <button class="tab" data-tab="profile">Profile</button>
+  </nav>
+
+  <section class="tab-panel active" id="tab-groups">
+    <div class="panel-head">
+      <h2>Your groups</h2>
+      <div style="display:flex; gap:0.6rem;">
+        <button class="btn-ghost small" id="joinGroupBtn">Join with code</button>
+        <button class="btn-primary small" id="newGroupBtn">+ New group</button>
+      </div>
+    </div>
+    <div id="groupList" class="group-list"></div>
+    <p class="muted" id="groupListEmpty" style="display:none;">No groups yet — create one or join with a code from someone in your group.</p>
+  </section>
+
+  <section class="tab-panel" id="tab-ledger">
+    <div id="ledgerEmpty" class="empty-state"><p>Pick a group from the Groups tab to open its ledger.</p></div>
+    <div id="ledgerContent" class="hidden">
+      <div class="panel-head">
+        <div>
+          <h2 id="ledgerTitle">Group name</h2>
+          <p class="muted" id="ledgerMeta"></p>
+          <p class="muted">Group code: <span class="code-chip" id="ledgerCode"></span> (share this to invite members)</p>
+        </div>
+      </div>
+      <table class="ledger-table">
+        <thead><tr><th>Member</th><th>Status</th><th>Amount</th></tr></thead>
+        <tbody id="ledgerRows"></tbody>
+      </table>
+      <div class="chat-box">
+        <p class="section-label">Group chat</p>
+        <div class="chat-messages" id="chatMessages"></div>
+        <form id="chatForm" class="chat-form">
+          <input type="text" id="chatInput" placeholder="Message the group…" autocomplete="off">
+          <button type="submit" class="btn-primary small">Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-profile">
+    <div class="profile-card">
+      <div class="profile-top">
+        <div class="avatar" id="avatarInitials">--</div>
+        <div>
+          <h2 id="profileName">—</h2>
+          <p class="muted" id="profilePhone">—</p>
+          <p class="muted" id="kycStatusLine"></p>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div><span class="stat-num" id="statTrust">—</span><span class="stat-label">trust score</span></div>
+        <div><span class="stat-num" id="statCycles">—</span><span class="stat-label">cycles completed</span></div>
+        <div><span class="stat-num" id="statGroups">—</span><span class="stat-label">groups joined</span></div>
+      </div>
+      <button class="btn-primary" id="kycOpenBtn">Upload Ghana Card & selfie</button>
+    </div>
+  </section>
+</div>
+
+<!-- New group modal -->
+<div id="modalOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Start a new group</h3>
+    <form id="newGroupForm">
+      <label>Group name<input type="text" id="ngName" placeholder="e.g. Kaneshie Traders" required></label>
+      <label>Contribution amount (GH₵)<input type="number" id="ngAmount" placeholder="20" min="1" required></label>
+      <label>Number of members<input type="number" id="ngSize" placeholder="12" min="2" required></label>
+      <p class="form-error" id="ngError"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="cancelNewGroup">Cancel</button>
+        <button type="submit" class="btn-primary">Create group</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Join group modal -->
+<div id="joinOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Join a group</h3>
+    <form id="joinGroupForm">
+      <label>Group code<input type="text" id="jgCode" placeholder="e.g. K7X2Q9" maxlength="6" style="text-transform:uppercase;" required></label>
+      <p class="form-error" id="jgError"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="cancelJoinGroup">Cancel</button>
+        <button type="submit" class="btn-primary">Join</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- KYC modal -->
+<div id="kycOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Verify your identity</h3>
+    <p class="muted" style="margin-top:-0.6rem;">Stored against your account. Not yet checked by an automated verification service.</p>
+    <form id="kycForm">
+      <label>Ghana Card photo<input type="file" accept="image/*" id="kycCard" required></label>
+      <label>Selfie<input type="file" accept="image/*" capture="user" id="kycSelfie" required></label>
+      <p class="form-error" id="kycError"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="cancelKyc">Cancel</button>
+        <button type="submit" class="btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
